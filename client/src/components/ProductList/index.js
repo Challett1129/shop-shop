@@ -32,15 +32,6 @@ function ProductList() {
 
   const products = data?.products || [];
 
-  function filterProducts() {
-    if (!currentCategory) {
-      return products;
-    }
-
-    return products.filter(
-      (product) => product.category._id === currentCategory
-    );
-  }
 
   return (
     <div className="my-2">
