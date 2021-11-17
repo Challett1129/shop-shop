@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStoreContext } from '../../utils/GlobalState';
-import { TOGGLE_CART } from '../../utils/actions';
+import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
+import { idbPromise } from "../../utils/helpers";
 import CartItem from '../CartItem';
 import Auth from '../../utils/auth';
 import './style.css';
@@ -20,6 +21,18 @@ const Cart = () => {
         });
         return sum.toFixed(2);
       }
+      
+    useEffect(() => {
+      async function getCart() {
+        const cart = await idbPromise('cart', 'get');
+        dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+      };
+    
+      if (!state.cart.length) {
+        getCart();
+      }
+    }, [state.cart.length, dispatch]);
+      
 
     if (!state.cartOpen) {
         return (
@@ -30,6 +43,8 @@ const Cart = () => {
           </div>
         );
       }
+
+      
 
   return (
 <div className="cart">
